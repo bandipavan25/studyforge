@@ -56,6 +56,7 @@ async function generate(prompt, schema, temperature) {
           config.code = "AI_CONFIG";
           throw config;
         }
+        console.error("[gemini] attempt failed:", model, error?.status, error?.message, error?.cause?.code || "");
         if (!isBusy(error)) {
           console.error("[gemini] unexpected error:", error.message);
           const unknown = new Error("The AI could not answer right now. Please try again.");
@@ -66,6 +67,7 @@ async function generate(prompt, schema, temperature) {
       }
     }
   }
+  console.error("[gemini] busy after retries:", lastError?.status, lastError?.message, lastError?.cause?.code || "");
   const busy = new Error("Our AI is busy right now. Please try again in a minute.");
   busy.status = 503;
   busy.code = "AI_BUSY";
